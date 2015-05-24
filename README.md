@@ -125,6 +125,24 @@ Fired when the connection to the bus is established.
 
 Fired when a message is received, before parsing by Sews.
 
+#### bus.server.connection
+
+Fired on a server node when a connection from a client node comes in.
+
+### The protocol
+
+Underneath the Eventbus there is a very basic protocol based on a message envelope which supports routing. In the current
+implementation, the message envelope consist of a simple JSON object with two mandatory properties: 'topic' & 'data'. The former
+contains the topic as defined earlier in this document. The latter, the 'data' propery, can contain any legal JSON value, inlcusing
+null.
+
+    {
+        "topic": "unicode.string.as.defined.above",
+        "data": <legal JSON value> 
+    }
+
+In cas
+
 ### ECMAScript 6
 
 Sews is written in ECMAScript 6 (2015). If to be executed in an ECMAScript 5 compatible run-time, you´ll need
