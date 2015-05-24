@@ -27,6 +27,20 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/*global is */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
               <h4 id="sews-js-simple-eventbus-for-web-sockets">Sews.js - Simple Eventbus for Web Sockets</h4>
 <h5 id="v-0-0-1-documentation-generated-with-the-lovely-docco-http-jashkenas-github-com-docco-">v 0.0.1 - Documentation generated with the lovely <a href="http://jashkenas.github.com/docco/">Docco</a></h5>
 <blockquote>
@@ -43,11 +57,11 @@ For an excellent overview of ES6 see: <a href="https://babeljs.io/docs/learn-es6
         </li>
         
         
-        <li id="section-2">
+        <li id="section-3">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h5 id="begin-sews-js-source">Begin Sews.js source</h5>
 
@@ -56,11 +70,11 @@ For an excellent overview of ES6 see: <a href="https://babeljs.io/docs/learn-es6
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Import Web Socket library</p>
 
@@ -74,11 +88,11 @@ For an excellent overview of ES6 see: <a href="https://babeljs.io/docs/learn-es6
         </li>
         
         
-        <li id="section-4">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the 
 actual “Bus”. From the client´s view, here is no difference between a “server” and a “bus” as <em>any</em> form of communication is 
@@ -92,11 +106,11 @@ this tidy abstraction, there remains the messy plumbing of a client-server archi
         </li>
         
         
-        <li id="section-5">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Options are a direct mapping to the options object of the ‘ws’ WebSocket library</p>
 
@@ -109,11 +123,11 @@ this tidy abstraction, there remains the messy plumbing of a client-server archi
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>The ‘connection’ event on the web socket object is fired when there is an incoming
 connection.</p>
@@ -125,11 +139,11 @@ connection.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>An open web socket is passed and encapsulated in a WsClient instance. This is used to comminicate between Server
 and this particular client</p>
@@ -142,11 +156,11 @@ and this particular client</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Fired when a message is received from the client</p>
 
@@ -161,11 +175,11 @@ and this particular client</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Parse message and validate that the envelope has a known and registered topic
 the _events property is a private member of an EventEmitter which maintains 
@@ -178,11 +192,11 @@ the keys of all registered event listeners or handlers.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>if unknown, fire the corresponding system event</p>
 
@@ -197,11 +211,11 @@ the keys of all registered event listeners or handlers.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>the handlers have signarure
 handler(topic: string, data: any, wc: WsClient): void </p>
@@ -220,13 +234,13 @@ handler(topic: string, data: any, wc: WsClient): void </p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Delegate error</p>
+              <p>Delegate </p>
 
             </div>
             
@@ -240,11 +254,11 @@ handler(topic: string, data: any, wc: WsClient): void </p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               
             </div>
@@ -254,11 +268,11 @@ handler(topic: string, data: any, wc: WsClient): void </p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>The signature of WsClient´s contructor is:
 constructor(arg mixed, callback: function): void 
@@ -276,11 +290,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>If already created - server side, it is not used client side - this one is used to encapsulate a WebSocket</p>
 
@@ -296,11 +310,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Create new instance of socket client side</p>
 
@@ -311,11 +325,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Fire callback if present when the ‘open’ event is fired</p>
 
@@ -329,11 +343,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Instead of the callback, a handler can be registered on the ‘bus.open’ event as well.</p>
 
@@ -345,11 +359,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>For any incoming message, this event is fired. </p>
 
@@ -362,11 +376,11 @@ has been established.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Parse message and validate that the envelope has a known and registered topic
 the _events property is a private member of an EventEmitter which maintains 
@@ -397,11 +411,11 @@ the keys of all registered event listeners or handlers.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Pack the data and topic in a basic Sews envelope and send it as JSON to 
 the server or client on the other side of the connection.</p>
@@ -417,11 +431,11 @@ the server or client on the other side of the connection.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Create new instance of am Eventbus (“server” component)</p>
 
@@ -434,11 +448,11 @@ the server or client on the other side of the connection.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Connect to an Eventbus</p>
 
