@@ -1,6 +1,6 @@
 {
   "name": "sews",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simplified Eventbus on Web Sockets",
   "main": "dist/sews.js",
   "scripts": {
