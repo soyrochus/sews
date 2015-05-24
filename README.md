@@ -56,9 +56,9 @@ a particilar hierachy within the topic an can be used for routing. A topic canno
 
 Valid topic names are:
 
- - 日本庭園*.*枯山水
- - com*.*skitr*.*com*.*blog*.*posts*.*2015
- - 25892e17-80f6-415f-9c65-7395632f0223*.*read
+ - 日本庭園.枯山水
+ - com.skitr.com.blog.posts.2015
+ - 25892e17-80f6-415f-9c65-7395632f0223.read
  
 Nodes cannot send messages to the following topics:
 
