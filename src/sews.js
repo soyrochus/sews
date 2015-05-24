@@ -1,4 +1,3 @@
-/*global is */
 // #### Sews.js - Simple Eventbus for Web Sockets
 // ##### v 0.0.1 - Documentation generated with the lovely [Docco](http://jashkenas.github.com/docco/)
 // 
