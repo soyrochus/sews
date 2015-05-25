@@ -1,5 +1,5 @@
 // #### Sews.js - Simple Eventbus for Web Sockets
-// ##### v 0.0.2 - Documentation generated with the lovely [Docco](http://jashkenas.github.com/docco/)
+// ##### v 0.1.0 - Documentation generated with the lovely [Docco](http://jashkenas.github.com/docco/)
 // 
 // > Copyright (c) 2015 Iwan van der Kleijn
 // > All rights reserved.
@@ -17,6 +17,10 @@ import * as ws from 'ws';
 import WebSocket from 'ws';
 
 import {EventEmitter} from 'events';
+
+let isValidTopic = function(topic){
+  return true;
+}
 
 // The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the 
 // actual "Bus". From the client´s view, here is no difference between a "server" and a "bus" as *any* form of communication is 
@@ -68,6 +72,13 @@ class WsBus extends EventEmitter {
       console.log('error', error);
       this.emit('bus.error',error);
     });
+  }
+
+  on(topic, handler){
+    if(!isValidTopic(topic)){
+      throw new Error('Invalid topic');
+    }
+    super.on(topic, handler);
   }
 }
 
@@ -125,6 +136,13 @@ class WsClient extends EventEmitter {
     this.ws.on('error', (error) => {
       this.emit('bus.error', error);
     });
+  }
+
+  on(topic, handler){
+    if(!isValidTopic(topic)){
+      throw new Error('Invalid topic');
+    }
+    super.on(topic, handler);
   }
 
   send(topic, data){

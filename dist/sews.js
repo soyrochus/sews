@@ -1,5 +1,5 @@
 // #### Sews.js - Simple Eventbus for Web Sockets
-// ##### v 0.0.2 - Documentation generated with the lovely [Docco](http://jashkenas.github.com/docco/)
+// ##### v 0.1.0 - Documentation generated with the lovely [Docco](http://jashkenas.github.com/docco/)
 //
 // > Copyright (c) 2015 Iwan van der Kleijn
 // > All rights reserved.
@@ -38,6 +38,10 @@ var ws = _interopRequireWildcard(_ws);
 var _ws2 = _interopRequireDefault(_ws);
 
 var _events = require('events');
+
+var isValidTopic = function isValidTopic(topic) {
+  return true;
+};
 
 // The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the
 // actual "Bus". From the client´s view, here is no difference between a "server" and a "bus" as *any* form of communication is
@@ -98,6 +102,16 @@ var WsBus = (function (_EventEmitter) {
   }
 
   _inherits(WsBus, _EventEmitter);
+
+  _createClass(WsBus, [{
+    key: 'on',
+    value: function on(topic, handler) {
+      if (!isValidTopic(topic)) {
+        throw new Error('Invalid topic');
+      }
+      _get(Object.getPrototypeOf(WsBus.prototype), 'on', this).call(this, topic, handler);
+    }
+  }]);
 
   return WsBus;
 })(_events.EventEmitter);
@@ -166,6 +180,14 @@ var WsClient = (function (_EventEmitter2) {
   _inherits(WsClient, _EventEmitter2);
 
   _createClass(WsClient, [{
+    key: 'on',
+    value: function on(topic, handler) {
+      if (!isValidTopic(topic)) {
+        throw new Error('Invalid topic');
+      }
+      _get(Object.getPrototypeOf(WsClient.prototype), 'on', this).call(this, topic, handler);
+    }
+  }, {
     key: 'send',
     value: function send(topic, data) {
       // Pack the data and topic in a basic Sews envelope and send it as JSON to

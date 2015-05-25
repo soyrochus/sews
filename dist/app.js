@@ -32,13 +32,13 @@ var counter = 0;
 var client = _sews2['default'].connect('ws://localhost:8080', function () {
   counter++;
   client.send('men.read', 'givemedata: ' + counter);
-  //client.send('men.meep', "givemedataaswell");
+  client.send('men.meep', 'givemedataaswell');
 });
 
 client.on('men.changed', function (data, con) {
   console.log('client received "men.changed"', data);
   counter++;
-  client.send('men.read', 'givemedata: ' + counter);
+  //client.send('men.read', "givemedata: " + counter);
 });
 
 client.on('bus.error', function (error) {
