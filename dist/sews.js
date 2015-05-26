@@ -39,9 +39,19 @@ var _ws2 = _interopRequireDefault(_ws);
 
 var _events = require('events');
 
+var hasWhiteSpace = /\s/;
+var hasReservedChars = /[@\\/:\*\{\}\?%#$&]/;
+var hasDotsAtEitherEnd = /(^\.).*(\.$)/;
+
 var isValidTopic = function isValidTopic(topic) {
-  return true;
+
+  return !(hasWhiteSpace.test(topic) || hasReservedChars.test(topic) || hasDotsAtEitherEnd.test(topic));
 };
+
+var topic = 'men.changed.';
+console.log('men.changed check whitespace', hasWhiteSpace.test(topic));
+console.log('men.changed check reservedChars', hasReservedChars.test(topic));
+console.log('men.changed check hasDotsAtEitherEnd', hasDotsAtEitherEnd.test(topic));
 
 // The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the
 // actual "Bus". From the client´s view, here is no difference between a "server" and a "bus" as *any* form of communication is
@@ -97,7 +107,7 @@ var WsBus = (function (_EventEmitter) {
     //Delegate error
     this.server.on('error', function (error) {
       console.log('error', error);
-      _this.emit('bus.error', error);
+      _this.emit('bus.error', err27or);
     });
   }
 
@@ -188,11 +198,29 @@ var WsClient = (function (_EventEmitter2) {
       _get(Object.getPrototypeOf(WsClient.prototype), 'on', this).call(this, topic, handler);
     }
   }, {
+    key: 'close',
+    value: function close() {
+      this.ws.close();
+    }
+  }, {
     key: 'send',
-    value: function send(topic, data) {
+    value: function send(topicOrHeaders, data) {
       // Pack the data and topic in a basic Sews envelope and send it as JSON to
       // the server or client on the other side of the connection.
-      this.ws.send(JSON.stringify({ topic: topic, data: data }));
+
+      var topic = topicOrHeaders.topic || topicOrHeaders;
+      if (!isValidTopic(topic)) {
+        throw new Error('Invalid topic or header object');
+      }
+
+      var lettersheet = undefined;
+      if (typeof data == 'undefined') {
+        lettersheet = topicOrHeaders;
+      } else {
+        lettersheet = [topicOrHeaders, data];
+      }
+
+      this.ws.send(JSON.stringify(lettersheet));
     }
   }]);
 

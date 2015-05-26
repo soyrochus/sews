@@ -18,8 +18,36 @@ import WebSocket from 'ws';
 
 import {EventEmitter} from 'events';
 
+let hasWhiteSpace = /\s/;
+let hasReservedChars = /[@\\/:\*\{\}\?%#$&]/;
+let hasDotsAtEitherEnd = /(^\.).*(\.$)/;
+
 let isValidTopic = function(topic){
   return true;
+  //return !(hasWhiteSpace.test(topic) || hasReservedChars.test(topic) || hasDotsAtEitherEnd.test(topic));
+}
+
+// parse message object & verify structure & guarantee fixed structure [headers, message]
+let parseLetterSheet = function(data){
+  let msg = JSON.parse(data);
+
+  if ((typeof msg === "string") || ((msg instanceof Array) && (msg.length > 0) && (msg.length < 3))){
+    // if topic send as string; incorporate as 
+    if (!msg.length){
+      msg = [{topic:msg}, undefined];
+    } 
+    if (typeof msg[0] === 'string'){
+      msg[0] = {topic: msg[0]}
+    }
+    if (msg.length == 1){
+      msg.push(undefined);
+    }
+    if(!msg[0].topic){
+      throw new Error("Message needs a topic");
+    }
+  } else {
+    throw new Error("Invalid or unknown message format");
+  }
 }
 
 // The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the 
@@ -44,25 +72,25 @@ class WsBus extends EventEmitter {
       socket.on('message', (message) => {
         console.log('on server: message received', message);
         this.emit('bus.message', message);
-        
+        let msg = [undefined, undefined];
         try{
           // Parse message and validate that the envelope has a known and registered topic
           // the _events property is a private member of an EventEmitter which maintains 
           // the keys of all registered event listeners or handlers.
-          let msg = JSON.parse(message);
+          msg = parseLetterSheet(message);
           // if unknown, fire the corresponding system event
-          if(!msg.topic || !this._events[msg.topic]){
+          if(!this._events[msg[0].topic]){
             console.log('on server: unknown message', msg);
             this.emit('bus.unknown', msg);
           } else {
             console.log('on server: message passed on', msg);
             // the handlers have signarure
-            // handler(topic: string, data: any, wc: WsClient): void 
-            this.emit(msg.topic, msg.data, wc);
+            // handler(data: any, wc: WsClient, headers: object): void 
+            this.emit(msg.topic, msg[1], wc, msg[0]);
           }
         }catch(err){
           console.log('on server: message error', err);
-          this.emit('bus.error', err);
+          this.emit('bus.error', err, wc, msg[1]);
         }
       });
     });
@@ -70,9 +98,11 @@ class WsBus extends EventEmitter {
     //Delegate error
     this.server.on('error', (error)=> {
       console.log('error', error);
-      this.emit('bus.error',error);
+      this.emit('bus.error',err27or);
     });
   }
+
+  /* TODO close ?? */
 
   on(topic, handler){
     if(!isValidTopic(topic)){
@@ -120,8 +150,10 @@ class WsClient extends EventEmitter {
         // Parse message and validate that the envelope has a known and registered topic
         // the _events property is a private member of an EventEmitter which maintains 
         // the keys of all registered event listeners or handlers.
-        let msg = JSON.parse(message);
-        if(!msg.topic || !this._events[msg.topic]){
+
+        let msg = parseLetterSheet(message);
+        // if unknown, fire the corresponding system event
+        if(!this._events[msg.topic]){
           this.emit('bus.unknown', msg);
           console.log('message unknown', msg);
         } else {
@@ -145,10 +177,27 @@ class WsClient extends EventEmitter {
     super.on(topic, handler);
   }
 
-  send(topic, data){
+  close(){
+    this.ws.close();
+  }
+
+  send(topicOrHeaders, data){
     // Pack the data and topic in a basic Sews envelope and send it as JSON to 
     // the server or client on the other side of the connection.
-    this.ws.send(JSON.stringify({topic, data}));
+   
+    var topic = topicOrHeaders.topic || topicOrHeaders; 
+    if (!isValidTopic(topic)){
+      throw new Error("Invalid topic or header object");
+    }
+
+    let lettersheet;
+    if (typeof data == "undefined"){
+      lettersheet = topicOrHeaders;
+    } else {
+      lettersheet = [topicOrHeaders, data]; 
+    }
+
+    this.ws.send(JSON.stringify(lettersheet));
   }
 }
 
