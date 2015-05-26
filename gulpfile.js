@@ -20,6 +20,20 @@ gulp.task("default", function () {
          .pipe(gulp.dest("dist"));
 });
 
+
+gulp.task("test", function () {
+  return gulp.src("test/**/*.js")
+//         .pipe(ignore(flymakeFiles))
+//         .pile(ignore(emacsFiles))
+         .pipe(plumber())
+         .pipe(sourcemaps.init())
+  //    .pipe(concat("all.js"))
+         .pipe(babel())
+         .pipe(sourcemaps.write("."))
+         .pipe(gulp.dest("dist/test"));
+});
+
+
 gulp.task("watch", function(){
   gulp.watch('src/**/*.js', ['default']);
 });

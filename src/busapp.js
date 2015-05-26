@@ -9,7 +9,7 @@ import sews from './sews';
 
 let bus = sews.startbus({port:8080});
 
-bus.on('mock.data.read', (data, con)=> {
+/*bus.on('mock.data.read', (data, con)=> {
 
   console.log("server - mock.data.read");
   con.send('mock.data.retrieved',[
@@ -18,6 +18,12 @@ bus.on('mock.data.read', (data, con)=> {
     {id:3, name: "Marcus"},
     {id:4, name: "Zeke"}
   ]);
+});*/
+
+bus.on('mock.data.read', (data, con, headers)=> {
+
+  console.log('busapp: ', 'mock.data.read', data, headers);
+  con.send({topic: 'mock.data.retrieved', token: headers.token}, {data: data.data});
 });
 
 bus.on('mock.data.ping', (data, con)=> {

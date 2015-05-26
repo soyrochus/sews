@@ -44,14 +44,34 @@ var hasReservedChars = /[@\\/:\*\{\}\?%#$&]/;
 var hasDotsAtEitherEnd = /(^\.).*(\.$)/;
 
 var isValidTopic = function isValidTopic(topic) {
-
-  return !(hasWhiteSpace.test(topic) || hasReservedChars.test(topic) || hasDotsAtEitherEnd.test(topic));
+  return true;
+  //return !(hasWhiteSpace.test(topic) || hasReservedChars.test(topic) || hasDotsAtEitherEnd.test(topic));
 };
 
-var topic = 'men.changed.';
-console.log('men.changed check whitespace', hasWhiteSpace.test(topic));
-console.log('men.changed check reservedChars', hasReservedChars.test(topic));
-console.log('men.changed check hasDotsAtEitherEnd', hasDotsAtEitherEnd.test(topic));
+// parse message object & verify structure & guarantee fixed structure [headers, message]
+var parseLetterSheet = function parseLetterSheet(data) {
+  var msg = JSON.parse(data);
+
+  if (typeof msg === 'string' || msg instanceof Array && msg.length > 0 && msg.length < 3) {
+    // if topic send as string; incorporate as
+    if (!msg.length) {
+      msg = [{ topic: msg }, undefined];
+    }
+    if (typeof msg[0] === 'string') {
+      msg[0] = { topic: msg[0] };
+    }
+    if (msg.length == 1) {
+      msg.push(undefined);
+    }
+    if (!msg[0].topic) {
+      throw new Error('Message needs a topic');
+    }
+    //console.log("parseLetterSheet:", msg);
+    return msg;
+  } else {
+    throw new Error('Invalid or unknown message format');
+  }
+};
 
 // The Eventbus consist of a server and a client. The class WsBus implements the server which is the central node forming the
 // actual "Bus". From the client´s view, here is no difference between a "server" and a "bus" as *any* form of communication is
@@ -81,25 +101,25 @@ var WsBus = (function (_EventEmitter) {
       socket.on('message', function (message) {
         console.log('on server: message received', message);
         _this.emit('bus.message', message);
-
+        var msg = [undefined, undefined];
         try {
           // Parse message and validate that the envelope has a known and registered topic
           // the _events property is a private member of an EventEmitter which maintains
           // the keys of all registered event listeners or handlers.
-          var msg = JSON.parse(message);
+          msg = parseLetterSheet(message);
           // if unknown, fire the corresponding system event
-          if (!msg.topic || !_this._events[msg.topic]) {
+          if (!_this._events[msg[0].topic]) {
             console.log('on server: unknown message', msg);
             _this.emit('bus.unknown', msg);
           } else {
             console.log('on server: message passed on', msg);
             // the handlers have signarure
-            // handler(topic: string, data: any, wc: WsClient): void
-            _this.emit(msg.topic, msg.data, wc);
+            // handler(data: any, wc: WsClient, headers: object): void
+            _this.emit(msg.topic, msg[1], wc, msg[0]);
           }
         } catch (err) {
-          console.log('on server: message error', err);
-          _this.emit('bus.error', err);
+          console.log('on server: message error', err, msg);
+          _this.emit('bus.error', err, wc, msg[1]);
         }
       });
     });
@@ -114,12 +134,15 @@ var WsBus = (function (_EventEmitter) {
   _inherits(WsBus, _EventEmitter);
 
   _createClass(WsBus, [{
-    key: 'on',
-    value: function on(topic, handler) {
+    key: 'pon',
+
+    /* TODO close ?? */
+
+    value: function pon(topic, handler) {
       if (!isValidTopic(topic)) {
         throw new Error('Invalid topic');
       }
-      _get(Object.getPrototypeOf(WsBus.prototype), 'on', this).call(this, topic, handler);
+      //super.on(topic, handler);
     }
   }]);
 
@@ -169,8 +192,10 @@ var WsClient = (function (_EventEmitter2) {
         // Parse message and validate that the envelope has a known and registered topic
         // the _events property is a private member of an EventEmitter which maintains
         // the keys of all registered event listeners or handlers.
-        var msg = JSON.parse(message);
-        if (!msg.topic || !_this2._events[msg.topic]) {
+
+        var msg = parseLetterSheet(message);
+        // if unknown, fire the corresponding system event
+        if (!_this2._events[msg.topic]) {
           _this2.emit('bus.unknown', msg);
           console.log('message unknown', msg);
         } else {
@@ -190,8 +215,8 @@ var WsClient = (function (_EventEmitter2) {
   _inherits(WsClient, _EventEmitter2);
 
   _createClass(WsClient, [{
-    key: 'on',
-    value: function on(topic, handler) {
+    key: 'pon',
+    value: function pon(topic, handler) {
       if (!isValidTopic(topic)) {
         throw new Error('Invalid topic');
       }

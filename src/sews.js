@@ -45,6 +45,8 @@ let parseLetterSheet = function(data){
     if(!msg[0].topic){
       throw new Error("Message needs a topic");
     }
+    //console.log("parseLetterSheet:", msg); 
+    return msg;
   } else {
     throw new Error("Invalid or unknown message format");
   }
@@ -89,7 +91,7 @@ class WsBus extends EventEmitter {
             this.emit(msg.topic, msg[1], wc, msg[0]);
           }
         }catch(err){
-          console.log('on server: message error', err);
+          console.log('on server: message error', err, msg);
           this.emit('bus.error', err, wc, msg[1]);
         }
       });
@@ -104,11 +106,11 @@ class WsBus extends EventEmitter {
 
   /* TODO close ?? */
 
-  on(topic, handler){
+  pon(topic, handler){
     if(!isValidTopic(topic)){
       throw new Error('Invalid topic');
     }
-    super.on(topic, handler);
+    //super.on(topic, handler);
   }
 }
 
@@ -170,7 +172,7 @@ class WsClient extends EventEmitter {
     });
   }
 
-  on(topic, handler){
+  pon(topic, handler){
     if(!isValidTopic(topic)){
       throw new Error('Invalid topic');
     }

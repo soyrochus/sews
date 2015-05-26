@@ -15,10 +15,21 @@ var _sews2 = _interopRequireDefault(_sews);
 
 var bus = _sews2['default'].startbus({ port: 8080 });
 
-bus.on('mock.data.read', function (data, con) {
+/*bus.on('mock.data.read', (data, con)=> {
 
-  console.log('server - mock.data.read');
-  con.send('mock.data.retrieved', [{ id: 1, name: 'Daina' }, { id: 2, name: 'Tecla' }, { id: 3, name: 'Marcus' }, { id: 4, name: 'Zeke' }]);
+  console.log("server - mock.data.read");
+  con.send('mock.data.retrieved',[
+    {id:1, name: "Daina"},
+    {id:2, name: "Tecla"},
+    {id:3, name: "Marcus"},
+    {id:4, name: "Zeke"}
+  ]);
+});*/
+
+bus.on('mock.data.read', function (data, con, headers) {
+
+  console.log('busapp: ', 'mock.data.read', data, headers);
+  con.send({ topic: 'mock.data.retrieved', token: headers.token }, { data: data.data });
 });
 
 bus.on('mock.data.ping', function (data, con) {
