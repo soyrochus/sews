@@ -72,7 +72,7 @@ class WsBus extends EventEmitter {
       this.emit('bus.server.connection', wc);
       // Fired when a message is received from the client
       socket.on('message', (message) => {
-        console.log('on server: message received', message);
+        //console.log('on server: message received', message);
         this.emit('bus.message', message);
         let msg = [undefined, undefined];
         try{
@@ -82,13 +82,13 @@ class WsBus extends EventEmitter {
           msg = parseLetterSheet(message);
           // if unknown, fire the corresponding system event
           if(!this._events[msg[0].topic]){
-            console.log('on server: unknown message', msg);
+            //console.log('on server: unknown message', msg);
             this.emit('bus.unknown', msg);
           } else {
-            console.log('on server: message passed on', msg);
+            // console.log('on server: message passed on', msg);
             // the handlers have signarure
             // handler(data: any, wc: WsClient, headers: object): void 
-            this.emit(msg.topic, msg[1], wc, msg[0]);
+            this.emit(msg[0].topic, msg[1], wc, msg[0]);
           }
         }catch(err){
           console.log('on server: message error', err, msg);
@@ -100,17 +100,17 @@ class WsBus extends EventEmitter {
     //Delegate error
     this.server.on('error', (error)=> {
       console.log('error', error);
-      this.emit('bus.error',err27or);
+      this.emit('bus.error',error);
     });
   }
 
   /* TODO close ?? */
 
-  pon(topic, handler){
+  on(topic, handler){
     if(!isValidTopic(topic)){
       throw new Error('Invalid topic');
     }
-    //super.on(topic, handler);
+    super.on(topic, handler);
   }
 }
 
@@ -147,7 +147,7 @@ class WsClient extends EventEmitter {
 
     // For any incoming message, this event is fired. 
     this.ws.on('message', (message) => {
-      console.log('message received', message);
+      //console.log('message received', message);
       try{
         // Parse message and validate that the envelope has a known and registered topic
         // the _events property is a private member of an EventEmitter which maintains 
@@ -155,12 +155,14 @@ class WsClient extends EventEmitter {
 
         let msg = parseLetterSheet(message);
         // if unknown, fire the corresponding system event
-        if(!this._events[msg.topic]){
+        if(!this._events[msg[0].topic]){
+          //console.log('message unknown', msg);
           this.emit('bus.unknown', msg);
-          console.log('message unknown', msg);
         } else {
-          console.log('message passed on', msg);
-          this.emit(msg.topic, msg.data, this);
+          //console.log('message passed on', msg);
+          // the handlers have signarure
+          // handler(data: any, wc: WsClient, headers: object): void 
+          this.emit(msg[0].topic, msg[1], this, msg[0]);
         }
       }catch(err){
         console.log('message error:', error);
@@ -172,13 +174,13 @@ class WsClient extends EventEmitter {
     });
   }
 
-  pon(topic, handler){
+  on(topic, handler){
     if(!isValidTopic(topic)){
       throw new Error('Invalid topic');
     }
     super.on(topic, handler);
   }
-
+  
   close(){
     this.ws.close();
   }

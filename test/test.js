@@ -26,7 +26,7 @@ import sews from '../sews';
 import * as assert from 'assert';
 
 describe('The user', ()=>{
-  it('should be able to authenticate with a locally stored token', (done) =>{
+  it('should be able to send data with a full "round-trip"', (done) =>{
 
     sews.connect('ws://localhost:8080',()=>{
       var token  = 'C40435342D154E2DAFE18973B68C6A30';

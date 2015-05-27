@@ -37,7 +37,7 @@ var _assert = require('assert');
 var assert = _interopRequireWildcard(_assert);
 
 describe('The user', function () {
-  it('should be able to authenticate with a locally stored token', function (done) {
+  it('should be able to send data with a full "round-trip"', function (done) {
 
     _sews2['default'].connect('ws://localhost:8080', function () {
       var token = 'C40435342D154E2DAFE18973B68C6A30';

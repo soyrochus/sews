@@ -99,7 +99,7 @@ var WsBus = (function (_EventEmitter) {
       _this.emit('bus.server.connection', wc);
       // Fired when a message is received from the client
       socket.on('message', function (message) {
-        console.log('on server: message received', message);
+        //console.log('on server: message received', message);
         _this.emit('bus.message', message);
         var msg = [undefined, undefined];
         try {
@@ -109,13 +109,13 @@ var WsBus = (function (_EventEmitter) {
           msg = parseLetterSheet(message);
           // if unknown, fire the corresponding system event
           if (!_this._events[msg[0].topic]) {
-            console.log('on server: unknown message', msg);
+            //console.log('on server: unknown message', msg);
             _this.emit('bus.unknown', msg);
           } else {
-            console.log('on server: message passed on', msg);
+            // console.log('on server: message passed on', msg);
             // the handlers have signarure
             // handler(data: any, wc: WsClient, headers: object): void
-            _this.emit(msg.topic, msg[1], wc, msg[0]);
+            _this.emit(msg[0].topic, msg[1], wc, msg[0]);
           }
         } catch (err) {
           console.log('on server: message error', err, msg);
@@ -127,22 +127,22 @@ var WsBus = (function (_EventEmitter) {
     //Delegate error
     this.server.on('error', function (error) {
       console.log('error', error);
-      _this.emit('bus.error', err27or);
+      _this.emit('bus.error', error);
     });
   }
 
   _inherits(WsBus, _EventEmitter);
 
   _createClass(WsBus, [{
-    key: 'pon',
+    key: 'on',
 
     /* TODO close ?? */
 
-    value: function pon(topic, handler) {
+    value: function on(topic, handler) {
       if (!isValidTopic(topic)) {
         throw new Error('Invalid topic');
       }
-      //super.on(topic, handler);
+      _get(Object.getPrototypeOf(WsBus.prototype), 'on', this).call(this, topic, handler);
     }
   }]);
 
@@ -187,7 +187,7 @@ var WsClient = (function (_EventEmitter2) {
 
     // For any incoming message, this event is fired.
     this.ws.on('message', function (message) {
-      console.log('message received', message);
+      //console.log('message received', message);
       try {
         // Parse message and validate that the envelope has a known and registered topic
         // the _events property is a private member of an EventEmitter which maintains
@@ -195,12 +195,14 @@ var WsClient = (function (_EventEmitter2) {
 
         var msg = parseLetterSheet(message);
         // if unknown, fire the corresponding system event
-        if (!_this2._events[msg.topic]) {
+        if (!_this2._events[msg[0].topic]) {
+          //console.log('message unknown', msg);
           _this2.emit('bus.unknown', msg);
-          console.log('message unknown', msg);
         } else {
-          console.log('message passed on', msg);
-          _this2.emit(msg.topic, msg.data, _this2);
+          //console.log('message passed on', msg);
+          // the handlers have signarure
+          // handler(data: any, wc: WsClient, headers: object): void
+          _this2.emit(msg[0].topic, msg[1], _this2, msg[0]);
         }
       } catch (err) {
         console.log('message error:', error);
@@ -215,8 +217,8 @@ var WsClient = (function (_EventEmitter2) {
   _inherits(WsClient, _EventEmitter2);
 
   _createClass(WsClient, [{
-    key: 'pon',
-    value: function pon(topic, handler) {
+    key: 'on',
+    value: function on(topic, handler) {
       if (!isValidTopic(topic)) {
         throw new Error('Invalid topic');
       }
